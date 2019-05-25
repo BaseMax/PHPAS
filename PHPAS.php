@@ -9,7 +9,7 @@
 * @Repository : https://github.com/BaseMax/PHPAS
 *
 **/
-class parser {
+class AutoStyle {
 	public $_filename;
 	public $_input;
 	public $_open_tag=false;
