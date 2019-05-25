@@ -9,151 +9,226 @@
 * @Repository : https://github.com/BaseMax/PHPBeautifier
 *
 **/
-// startsWith
-function starts($input, $need) {
-	$length=strlen($need);
-	return(substr($input, 0, $length) === $need);
-}
-// endsWith
-function ends($input, $need) {
-	$length = strlen($need);
-	if($length == 0) {
-		return true;
-	}
-	return (substr($input, -$length) === $need);
-}
-$filename="test.php";
-$input=file_get_contents($filename);
-$_open_tag=false;
+class parser {
+	public $_filename;
+	public $_input;
+	public $_open_tag=false;
 
-$_open_string=false;
-$_open_dblstring=false;
-$_open_sngstring=false;
+	public $_ident=0;
+	public $_idents=[];
 
-$_open_comment="";
-$_open_sngcomment=false;
-$_open_mltcomment=false;
+	public $_open_string=false;
+	public $_open_dblstring=false;
+	public $_open_sngstring=false;
 
-$_index=0;
-$_length=mb_strlen($input);
-$result="";
-for($_index;$_index<$_length;$_index++) {
-	$_chars=mb_substr($input, $_index, 5);
-	$_char_length=mb_strlen($_chars);
-	$_char_next_next_next_next=null;
-	if($_char_length == 5) {
-		$_char_next_next_next_next=$_chars[4];
+	public $_open_comment="";
+	public $_open_sngcomment=false;
+	public $_open_mltcomment=false;
+
+	public $_index=0;
+	public $result="";
+
+	public $_char=null;
+	public $_chars=null;
+	public $_char_next_next_next_next=null;
+	public $_char_next_next_next=null;
+	public $_char_next_next=null;
+	public $_char_next=null;
+
+	// startsWith
+	public function starts($input, $need) {
+		$length=strlen($need);
+		return(substr($input, 0, $length) === $need);
 	}
-	$_char_next_next_next=null;
-	if($_char_length == 4) {
-		$_char_next_next_next=$_chars[3];
-	}
-	$_char_next_next=null;
-	if($_char_length == 3) {
-		$_char_next_next=$_chars[2];
-	}
-	$_char_next=null;
-	if($_char_length == 2) {
-		$_char_next=$_chars[1];
-	}
-	$_char=$_chars[0];
-	if($_open_tag === false) {
-		// if($_chars == "<?php" || starts($_chars,"<?")) {
-		if(starts($_chars,"<?=")) {
-			$result.="<?=";
-			$_open_tag=true;
-			$_index+=2;
+
+	// endsWith
+	public function ends($input, $need) {
+		$length = strlen($need);
+		if($length == 0) {
+			return true;
 		}
-		else if($_chars == "<?php") {
-			$result.="<?php";
-			$_open_tag=true;
-			$_index+=4;
+		return (substr($input, -$length) === $need);
+	}
+
+	// construct
+	public function __construct($filename) {
+		$this->_filename=$filename;
+		$this->_input=file_get_contents($this->_filename);
+		$this->_length=mb_strlen($this->_input);
+		$this->parse();
+	}
+
+	// update
+	private function update() {
+		$this->_chars=null;
+		$this->_char_next_next_next_next=null;
+		$this->_char_next_next_next=null;
+		$this->_char_next_next=null;
+		$this->_char_next=null;
+
+		$this->_chars=mb_substr($this->_input, $this->_index, 5);
+		$this->_char_length=mb_strlen($this->_chars);
+		if($this->_char_length == 5) {
+			$this->_char_next_next_next_next=$this->_chars[4];
 		}
-		else if(starts($_chars,"<?")) {
-			$result.="<?";
-			$_open_tag=true;
-			$_index+=1;
+		if($this->_char_length >= 4) {
+			$this->_char_next_next_next=$this->_chars[3];
+		}
+		if($this->_char_length >= 3) {
+			$this->_char_next_next=$this->_chars[2];
+		}
+		if($this->_char_length >= 2) {
+			$this->_char_next=$this->_chars[1];
+		}
+		if($this->_char_length >= 1) {
+			$this->_char=$this->_chars[0];
 		}
 	}
-	else {
-		if($_open_sngcomment === false && $_open_mltcomment === false && $_open_sngstring === false && $_open_dblstring === false) {
-			if(starts($_chars, " ")) { }
 
-			else if(starts($_chars, "\t")) { }
-
-			// else if(starts($_chars, "\n")) { }
-
-			else if(starts($_chars, "//")) {
-				$_open_sngcomment=true;
-				$_index+=1;
-				$_open_comment="";
-			}
-
-			else if(starts($_chars, "/*")) {
-				$_open_mltcomment=true;
-				$_index+=1;
-				$_open_comment="";
-			}
-
-			else if(starts($_chars, "{")) {
-				$result.=" {";
-			}
-
-			else {
-				$result.=$_char;
-			}
+	public function repeat($time, $string) {
+		$result="";
+		for($index=0;$index<$time;$index++) {
+			$result.=$string;
 		}
-		else if($_open_sngcomment === true) {
-			if(starts($_chars, "\n")) {
-				$_open_sngcomment=false;
-				$_open_comment=trim($_open_comment);
-				if($_open_comment != "") {
-					$result.="// ";
-					$result.=$_open_comment;
-					$result.="\n";
+		return $result;
+	}
+
+	public function removeLastLine() {
+		// $count=substr_count($this->input, "\n");
+		$this->result = join("\n", array_slice(explode("\n", $this->result), 0, -1));
+	}
+
+	public function parse() {
+		for(;$this->_index<$this->_length;$this->_index++) {
+			$this->update();
+			if($this->_open_tag === false) {
+				// if($this->_chars == "<?php" || $this->starts($this->_chars,"<?")) {
+				if($this->starts($this->_chars,"<?=")) {
+					$this->result.="<?=";
+					$this->_open_tag=true;
+					$this->_index+=2;
+				}
+				else if($this->_chars == "<?php") {
+					$this->result.="<?php";
+					$this->_open_tag=true;
+					$this->_index+=4;
+				}
+				else if($this->starts($this->_chars,"<?")) {
+					$this->result.="<?";
+					$this->_open_tag=true;
+					$this->_index+=1;
+				}
+				else {
+					$this->result.=$this->_char;
 				}
 			}
 			else {
-				$_open_comment.=$_char;
-			}
-		}
-		else if($_open_mltcomment === true) {
-			$_do=false;
-			if(starts($_chars, "*/\n")) {
-				$_do=true;
-				$_index+=2;
-			}
-			else if(starts($_chars, "*/")) {
-				$_do=true;
-				$_index+=1;
-			}
-			else {
-				$_open_comment.=$_char;
-			}
-			if($_do === true) {
-				$_open_mltcomment=false;
-				$_open_comment=trim($_open_comment);
-				if($_open_comment != "") {
-					$_comment_lines=substr_count($_open_comment, "\n");
-					if($_comment_lines > 0) {
-						$result.="/*\n";
-						$result.=$_open_comment;
-						$result.="*/\n";
+				if($this->_open_sngcomment === false && $this->_open_mltcomment === false && $this->_open_sngstring === false && $this->_open_dblstring === false) {
+					if($this->starts($this->_chars, " ")) { }
+
+					else if($this->starts($this->_chars, "\t")) { }
+
+					else if($this->starts($this->_chars, "\n")) {
+						$this->result.="\n";
+						$this->result.=$this->repeat($this->_ident, "\t");
+					}
+
+					else if($this->starts($this->_chars, "//")) {
+						$this->_open_sngcomment=true;
+						$this->_index+=1;
+						$this->_open_comment="";
+					}
+
+					else if($this->starts($this->_chars, "/*")) {
+						$this->_open_mltcomment=true;
+						$this->_index+=1;
+						$this->_open_comment="";
+					}
+
+					else if($this->starts($this->_chars, "{")) {
+						$this->_idents[]="{";
+						$this->_ident++;
+						while($this->starts($this->_chars, " ") === true || $this->starts($this->_chars, "\t") === true || $this->starts($this->_chars, "\n") === true) {
+							$this->_index++;
+							$this->update();
+						}
+						$this->_index++;
+						$this->result.=" {\n";
+						// $this->result.="...";
+						$this->result.=$this->repeat($this->_ident, "\t");
+					}
+
+					else if($this->starts($this->_chars, "}")) {
+						$this->_idents[]="}";
+						$this->_ident--;
+						while($this->starts($this->_chars, " ") === true || $this->starts($this->_chars, "\t") === true || $this->starts($this->_chars, "\n") === true) {
+							$this->_index++;
+							$this->update();
+						}
+						$this->removeLastLine();
+						$this->result.="\n";
+						$this->result.=$this->repeat($this->_ident, "\t");
+						$this->result.="}\n";
+					}
+
+					else {
+						$this->result.=$this->_char;
+					}
+				}
+				else if($this->_open_sngcomment === true) {
+					if($this->starts($this->_chars, "\n")) {
+						$this->_open_sngcomment=false;
+						$this->_open_comment=trim($this->_open_comment);
+						if($this->_open_comment != "") {
+							$this->result.="// ";
+							$this->result.=$this->_open_comment;
+							$this->result.="\n";
+						}
 					}
 					else {
-						$result.="/* ";
-						$result.=$_open_comment;
-						$result.=" */\n";
+						$this->_open_comment.=$this->_char;
 					}
+				}
+				else if($this->_open_mltcomment === true) {
+					$this->_do=false;
+					if($this->starts($this->_chars, "*/\n")) {
+						$this->_do=true;
+						$this->_index+=2;
+					}
+					else if($this->starts($this->_chars, "*/")) {
+						$this->_do=true;
+						$this->_index+=1;
+					}
+					else {
+						$this->_open_comment.=$this->_char;
+					}
+					if($this->_do === true) {
+						$this->_open_mltcomment=false;
+						$this->_open_comment=trim($this->_open_comment);
+						if($this->_open_comment != "") {
+							$this->_comment_lines=substr_count($this->_open_comment, "\n");
+							if($this->_comment_lines > 0) {
+								$this->result.="/*\n";
+								$this->result.=$this->_open_comment;
+								$this->result.="*/\n";
+							}
+							else {
+								$this->result.="/* ";
+								$this->result.=$this->_open_comment;
+								$this->result.=" */\n";
+							}
+						}
+					}
+				}
+				else if($this->resultopen_sngstring === true) {
+					
+				}
+				else if($this->_open_dblstring === true) {
+					
 				}
 			}
 		}
-		else if($_open_sngstring === true) {
-			
-		}
-		else if($_open_dblstring === true) {
-			
-		}
 	}
 }
-print $result."\n";
+$parser=new parser("test.php");
+print $parser->result."\n";
