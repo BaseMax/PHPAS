@@ -9,7 +9,7 @@
 * @Repository : https://github.com/BaseMax/PHPAS
 *
 **/
-class AutoStyle {
+class PHPAutoStyle {
 	public $_filename;
 	public $_input;
 	public $_open_tag=false;
@@ -54,12 +54,27 @@ class AutoStyle {
 	}
 
 	// construct
-	public function __construct($filename) {
+	public function __construct() {
+		// SKIP
+	}
+
+	// loadFile
+	public function loadFile($filename) {
 		$this->_filename=$filename;
 		$this->_input=file_get_contents($this->_filename);
 		$this->_length=mb_strlen($this->_input);
 		$this->parse();
 		// $this->solve();
+		return $this->result;
+	}
+
+	// loadString
+	public function loadString($input) {
+		$this->_input=$input;
+		$this->_length=mb_strlen($this->_input);
+		$this->parse();
+		// $this->solve();
+		return $this->result;
 	}
 
 	// getLastCharacter
