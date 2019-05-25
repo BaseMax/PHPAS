@@ -85,6 +85,7 @@ class parser {
 		}
 	}
 
+	// repeat
 	public function repeat($time, $string) {
 		$result="";
 		for($index=0;$index<$time;$index++) {
@@ -93,11 +94,13 @@ class parser {
 		return $result;
 	}
 
+	// removeLastLine
 	public function removeLastLine() {
 		// $count=substr_count($this->input, "\n");
 		$this->result = join("\n", array_slice(explode("\n", $this->result), 0, -1));
 	}
 
+	// parse
 	public function parse() {
 		for(;$this->_index<$this->_length;$this->_index++) {
 			$this->update();
