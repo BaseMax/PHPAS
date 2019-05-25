@@ -24,6 +24,7 @@ Anyway, I hope this tool can help you for format a PHP code easily and fast.
 ### Demo
 
 Left: Output, Right: Input
+
 ![ScreenShot](screenshot.png)
 
 
