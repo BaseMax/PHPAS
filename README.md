@@ -46,7 +46,7 @@ for($v=7;$v<=100/10;$v++) {
 
 ### Input
 
-```
+```php
 <?php
 /*      	 	 	 dfgdgdf gdfg */
 for ($v = 7;$v <= 100 / 10;$v++) { $b = $v; $x = []; for ($i = 1;$i <= $v;$i++) {$x[] = $i;
@@ -58,7 +58,7 @@ $str="hello world!";
 
 ### Output
 
-```
+```php
 <?php
 /* dfgdgdf gdfg */
 for($v = 7;$v <= 100 / 10;$v++) {
