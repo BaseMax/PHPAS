@@ -25,6 +25,9 @@ class parser {
 	public $_open_sngcomment=false;
 	public $_open_mltcomment=false;
 
+	public $_open_for=false;
+	public $_open_for_code="";
+
 	public $_index=0;
 	public $result="";
 
@@ -56,8 +59,21 @@ class parser {
 		$this->_input=file_get_contents($this->_filename);
 		$this->_length=mb_strlen($this->_input);
 		$this->parse();
+		// $this->solve();
 	}
 
+	// getLastCharacter
+	private function getLastCharacter($input) {
+		return mb_substr($input, -1);
+	}
+
+	// solve
+	private function solve() {
+		$this->result=str_replace("\n\n\n", "\n", $this->result);
+		$this->result=str_replace("\n\n", "\n", $this->result);
+		$this->result=str_replace("\n\n", "\n", $this->result);
+		// $count=substr_count($this->input, "\n");
+	}
 	// update
 	private function update() {
 		$this->_chars=null;
@@ -134,23 +150,53 @@ class parser {
 				}
 			}
 			else {
-				if($this->_open_sngcomment === false && $this->_open_mltcomment === false && $this->_open_sngstring === false && $this->_open_dblstring === false) {
+				if($this->_open_sngcomment === false && $this->_open_mltcomment === false && $this->_open_sngstring === false && $this->_open_dblstring === false && $this->_open_for === false) {
 					if($this->starts($this->_chars, " ")) { }
+
+					else if($this->starts($this->_chars, "for")) {
+						$temp=$this->_index;
+						$this->_index+=3;
+						$this->update();
+						// Skip whitespace...
+						while($this->starts($this->_chars, " ") === true || $this->starts($this->_chars, "\t") === true || $this->starts($this->_chars, "\n") === true) {
+							// print "Skip...\n";
+							$this->_index++;
+							$this->update();
+						}
+						if($this->_char == '(') {
+							$this->_open_for=true;
+							$this->_open_for_code="";
+							// $this->_index--;
+						}
+						else {
+							$this->_index=$temp;
+							$this->update();
+							$this->result.=$this->_char;
+						}
+					}
 
 					else if($this->starts($this->_chars, ",")) {
 						$this->result.=", ";
 					}
 
+					// We can not check it without parse the all identifier php scanner...
+					// 		$a=1; $b=2; => $a=1;\n$b=2;
+					// 		for($a=1;$a<4;$a++) => for($a=1; $a<4; $a++)
+
 					else if($this->starts($this->_chars, ";")) {
 						$this->result.=";";
-						if($this->_char_next !="\n") {
-							$this->result.=" ";
+						if($this->_char_next != "\n") {
+							$this->result.="\n";
+							$this->result.=$this->repeat($this->_ident, "\t");
 						}
 					}
 
 					else if($this->starts($this->_chars, "\t")) { }
 
 					else if($this->starts($this->_chars, "\n")) {
+						if($this->getLastCharacter($this->result) != "\n") {
+							// continue;
+						}
 						$this->result.="\n";
 						$this->result.=$this->repeat($this->_ident, "\t");
 					}
@@ -255,6 +301,28 @@ class parser {
 				}
 				else if($this->_open_sngstring === true) {
 
+				}
+				else if($this->_open_for === true) {
+					$this->result.="for(";
+					/*
+					 * BUG:
+					 	for ($k = 3;$k <= ((floor($v - 1/2)+1);
+					 		$k++) {
+
+					 * Solved...
+					*/
+					while($this->_char !== "{") {
+						$this->_open_for_code.=$this->_char;
+						$this->_index++;
+						$this->update();
+					}
+					$this->_open_for_code=trim($this->_open_for_code);
+					$this->result.=$this->_open_for_code;
+					$this->result.=" {\n";
+					$this->_ident++;
+					$this->_idents[]="{";
+					$this->result.=$this->repeat($this->_ident, "\t");
+					$this->_open_for=false;
 				}
 			}
 		}
