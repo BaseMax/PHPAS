@@ -1,12 +1,12 @@
 <?php
 /**
 *
-* @Name : PHPBeautifier/Parser.php
+* @Name : PHPAS/PHPAS.php (PHP Beautifier)
 * @Version : 1.0
 * @Programmer : Max
 * @Date : 2019-05-25
-* @Released under : https://github.com/BaseMax/PHPBeautifier/blob/master/LICENSE
-* @Repository : https://github.com/BaseMax/PHPBeautifier
+* @Released under : https://github.com/BaseMax/PHPAS/blob/master/LICENSE
+* @Repository : https://github.com/BaseMax/PHPAS
 *
 **/
 class parser {
