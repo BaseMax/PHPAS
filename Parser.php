@@ -17,7 +17,7 @@ class parser {
 	public $_ident=0;
 	public $_idents=[];
 
-	public $_open_string=false;
+	public $_open_string="";
 	public $_open_dblstring=false;
 	public $_open_sngstring=false;
 
@@ -127,14 +127,6 @@ class parser {
 					$this->_open_tag=true;
 					$this->_index+=2;
 				}
-				else if($this->starts($this->_chars, "\"")) {
-					$this->_open_dblstring=true;
-					$this->_open_string="";
-				}
-				else if($this->starts($this->_chars, "'")) {
-					$this->_open_sngstring=true;
-					$this->_open_string="";
-				}
 				else if($this->_chars == "<?php") {
 					$this->result.="<?php";
 					$this->_open_tag=true;
@@ -152,6 +144,16 @@ class parser {
 			else {
 				if($this->_open_sngcomment === false && $this->_open_mltcomment === false && $this->_open_sngstring === false && $this->_open_dblstring === false && $this->_open_for === false) {
 					if($this->starts($this->_chars, " ")) { }
+
+					else if($this->starts($this->_chars, "\"")) {
+						$this->_open_dblstring=true;
+						$this->_open_string="";
+					}
+	
+					else if($this->starts($this->_chars, "'")) {
+						$this->_open_sngstring=true;
+						$this->_open_string="";
+					}
 
 					else if($this->starts($this->_chars, "for")) {
 						$temp=$this->_index;
@@ -244,15 +246,19 @@ class parser {
 					}
 				}
 				else if($this->_open_dblstring === true) {
-					print "hey\n";
-					while($this->starts($this->_chars, "\"") === true) {
+					while($this->_char !="\"") {
 						$this->_open_string.=$this->_char;
 						$this->_index++;
+						if($this->_char == "\\" && $this->_char_next == "\"") {
+							$this->_index++;
+							$this->_open_string.=$this->_char_next;
+						}
 						$this->update();
 					}
 					$this->result.="\"";
 					$this->result.=$this->_open_string;
 					$this->result.="\"";
+					$this->_open_dblstring=false;
 				}
 				else if($this->_open_sngcomment === true) {
 					if($this->starts($this->_chars, "\n")) {
@@ -300,7 +306,19 @@ class parser {
 					}
 				}
 				else if($this->_open_sngstring === true) {
-
+					while($this->_char !="\'") {
+						$this->_open_string.=$this->_char;
+						$this->_index++;
+						if($this->_char == "\\" && $this->_char_next == "'") {
+							$this->_index++;
+							$this->_open_string.=$this->_char_next;
+						}
+						$this->update();
+					}
+					$this->result.="'";
+					$this->result.=$this->_open_string;
+					$this->result.="'";
+					$this->_open_sngstring=false;
 				}
 				else if($this->_open_for === true) {
 					$this->result.="for(";
