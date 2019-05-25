@@ -1,6 +1,6 @@
 # PHP Beautifier
 
-A toolfor format and beautify the style of PHP code with my style.
+A tool for format and beautify the style of PHP code with my style.
 
 ### Input
 
