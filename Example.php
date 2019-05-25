@@ -1,4 +1,6 @@
 <?php
 include "PHPAS.php"
-$AS=new AutoStyle("test.php");
-print $AS->result."\n";
+$AS=new AutoStyle();
+///////////////////////////////////////
+print $AS->loadFile("test.php") ."\n";
+print $AS->loadString("<?php\nprint 'hi';\n") ."\n";
