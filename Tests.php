@@ -4,7 +4,7 @@ if($files = opendir('./tests/php/')) {
 	$index=1;
 	while(false !== ($file = readdir($files))) {
 		if($file != "." && $file != "..") {
-			$AS=new AutoStyle($file);
+			$AS=new PHPAutoStyle($file);
 			$output_filename="tests/output/". $file;
 			if(file_exists($output_filename)) {
 				$output=file_get_contents($output_filename);
