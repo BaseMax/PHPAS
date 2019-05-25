@@ -13,6 +13,13 @@ So it will be a fantastic tool.
 
 Anyway, I hope this tool can help you for format a PHP code easily and fast.
 
+## Main purpose
+
+- remove extra space after "for", "while", "if" words...
+- Ident cleaning and auto tab for {} and statements...
+- Make clean the comment text
+- ...
+
 ### Input
 
 ```php
@@ -87,6 +94,11 @@ for($v = 7;$v <= 100 / 10;$v++) {
 
 $str="hello world!";
 ```
+
+## Partnership and development
+
+Please send issue or pull request if you found a bug or problem.
+Feel free to discuss or send pull...
 
 # License
 
