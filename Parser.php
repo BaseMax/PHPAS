@@ -346,5 +346,3 @@ class parser {
 		}
 	}
 }
-$parser=new parser("test.php");
-print $parser->result."\n";
