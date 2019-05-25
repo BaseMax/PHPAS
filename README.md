@@ -25,8 +25,7 @@ Anyway, I hope this tool can help you for format a PHP code easily and fast.
 
 Left: Output, Right: Input
 
-![ScreenShot](screenshot.png)
-
+![ScreenShot](https://raw.githubusercontent.com/BaseMax/PHPAS/master/screenshot.png)
 
 ### Input
 
@@ -45,7 +44,6 @@ solve($x, $v, $b, $k, $r);
 }
 }
 ```
-
 
 ### Result
 
