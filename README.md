@@ -25,6 +25,7 @@ solve($x, $v, $b, $k, $r);
 
 ```php
 <?php
+/* dfgdgdf gdfg */
 for($v=7;$v<=100/10;$v++) {
     $b=$v;
     $x=[];
