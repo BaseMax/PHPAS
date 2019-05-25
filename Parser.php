@@ -108,6 +108,14 @@ class parser {
 					$this->_open_tag=true;
 					$this->_index+=2;
 				}
+				else if($this->starts($this->_chars, "\"")) {
+					$this->_open_dblstring=true;
+					$this->_open_string="";
+				}
+				else if($this->starts($this->_chars, "'")) {
+					$this->_open_sngstring=true;
+					$this->_open_string="";
+				}
 				else if($this->_chars == "<?php") {
 					$this->result.="<?php";
 					$this->_open_tag=true;
@@ -125,6 +133,17 @@ class parser {
 			else {
 				if($this->_open_sngcomment === false && $this->_open_mltcomment === false && $this->_open_sngstring === false && $this->_open_dblstring === false) {
 					if($this->starts($this->_chars, " ")) { }
+
+					else if($this->starts($this->_chars, ",")) {
+						$this->result.=", ";
+					}
+
+					else if($this->starts($this->_chars, ";")) {
+						$this->result.=";";
+						if($this->_char_next !="\n") {
+							$this->result.=" ";
+						}
+					}
 
 					else if($this->starts($this->_chars, "\t")) { }
 
@@ -175,6 +194,17 @@ class parser {
 						$this->result.=$this->_char;
 					}
 				}
+				else if($this->_open_dblstring === true) {
+					print "hey\n";
+					while($this->starts($this->_chars, "\"") === true) {
+						$this->_open_string.=$this->_char;
+						$this->_index++;
+						$this->update();
+					}
+					$this->result.="\"";
+					$this->result.=$this->_open_string;
+					$this->result.="\"";
+				}
 				else if($this->_open_sngcomment === true) {
 					if($this->starts($this->_chars, "\n")) {
 						$this->_open_sngcomment=false;
@@ -220,11 +250,8 @@ class parser {
 						}
 					}
 				}
-				else if($this->resultopen_sngstring === true) {
-					
-				}
-				else if($this->_open_dblstring === true) {
-					
+				else if($this->_open_sngstring === true) {
+
 				}
 			}
 		}
