@@ -1,4 +1,4 @@
-# PHP Beautifier
+# PHP AS(Auto Style), PHP Beautifier
 
 A tool for format and beautify the style of PHP code with my style.
 
