@@ -10,6 +10,7 @@ if($files = opendir('./tests/php/')) {
 				$output=file_get_contents($output_filename);
 				// $output=trim($output);
 				echo "-> $index / $file => ";
+				// Maybe it displays false, because GitHub change the indent, tab style...
 				if($AS->result == $output) {
 					print "TRUE";
 				}
