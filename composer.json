@@ -1,1 +1,25 @@
-
+{
+    "name": "basemax/phpas",
+    "type": "library",
+    "description": "PHP Auto Style: A tool for format and beautify the style of PHP code with my style.",
+    "keywords": ["Utilities","Tools","Parsers"],
+    "homepage": "https://github.com/BaseMax/PHPAS",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Max Base",
+            "email": "MaxBaseCode@Gmail.Com",
+            "homepage": "https://BaseMax.Github.io",
+            "role": "Developer"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/BaseMax/PHPAS"
+        }
+    ],
+    "require": {
+      
+    }
+}
