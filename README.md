@@ -29,7 +29,7 @@ Left: Output, Right: Input
 
 ### Using
 
-```
+```php
 <?php
 include "PHPAS.php"
 $AS=new AutoStyle();
@@ -37,6 +37,13 @@ $AS=new AutoStyle();
 print $AS->loadFile("test.php") ."\n";
 print $AS->loadString("<?php\nprint 'hi';\n") ."\n";
 ```
+
+### Functions
+
+| Function Name  | Goal |
+| ------------- | ------------- |
+| loadFile  	| Auto Style, format a file and display output... |
+| loadString  	| Auto Style, format a string code and display output... |
 
 ### Input
 
