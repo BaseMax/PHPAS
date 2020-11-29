@@ -321,7 +321,7 @@ class PHPAutoStyle {
 					}
 				}
 				else if($this->_open_sngstring === true) {
-					while($this->_char !="\'") {
+					while($this->_char !="'") {
 						$this->_open_string.=$this->_char;
 						$this->_index++;
 						if($this->_char == "\\" && $this->_char_next == "'") {
