@@ -116,15 +116,6 @@ class PHPAutoStyle {
 		}
 	}
 
-	// repeat
-	public function repeat($time, $string) {
-		$result="";
-		for($index=0;$index<$time;$index++) {
-			$result.=$string;
-		}
-		return $result;
-	}
-
 	// removeLastLine
 	public function removeLastLine() {
 		// $count=substr_count($this->input, "\n");
@@ -204,7 +195,7 @@ class PHPAutoStyle {
 						$this->result.=";";
 						if($this->_char_next != "\n") {
 							$this->result.="\n";
-							$this->result.=$this->repeat($this->_ident, "\t");
+							$this->result.=str_repeat("\t", $this->_ident);
 						}
 					}
 
@@ -215,7 +206,7 @@ class PHPAutoStyle {
 							// continue;
 						}
 						$this->result.="\n";
-						$this->result.=$this->repeat($this->_ident, "\t");
+						$this->result.=str_repeat("\t", $this->_ident);
 					}
 
 					else if($this->starts($this->_chars, "//")) {
@@ -240,7 +231,7 @@ class PHPAutoStyle {
 						$this->_index++;
 						$this->result.=" {\n";
 						// $this->result.="...";
-						$this->result.=$this->repeat($this->_ident, "\t");
+						$this->result.=str_repeat("\t", $this->_ident);
 					}
 
 					else if($this->starts($this->_chars, "}")) {
@@ -252,7 +243,7 @@ class PHPAutoStyle {
 						}
 						$this->removeLastLine();
 						$this->result.="\n";
-						$this->result.=$this->repeat($this->_ident, "\t");
+						$this->result.=str_repeat("\t", $this->_ident);
 						$this->result.="}\n";
 					}
 
@@ -354,7 +345,7 @@ class PHPAutoStyle {
 					$this->result.=" {\n";
 					$this->_ident++;
 					$this->_idents[]="{";
-					$this->result.=$this->repeat($this->_ident, "\t");
+					$this->result.=str_repeat("\t", $this->_ident);
 					$this->_open_for=false;
 				}
 			}
