@@ -38,6 +38,8 @@ class PHPAutoStyle {
 	public $_char_next_next=null;
 	public $_char_next=null;
 
+	private $_indentation = "\t";
+
 	// startsWith
 	public function starts($input, $need) {
 		$length=strlen($need);
@@ -54,8 +56,12 @@ class PHPAutoStyle {
 	}
 
 	// construct
-	public function __construct() {
-		// SKIP
+	public function __construct($options=[]) {
+		$this->setOptions($options);
+	}
+
+	public function setOptions($options) {
+		if (isset($options['indentation']))  $this->_indentation = $options['indentation'];
 	}
 
 	// loadFile
@@ -195,7 +201,7 @@ class PHPAutoStyle {
 						$this->result.=";";
 						if($this->_char_next != "\n") {
 							$this->result.="\n";
-							$this->result.=str_repeat("\t", $this->_ident);
+							$this->result.=str_repeat($this->_indentation, $this->_ident);
 						}
 					}
 
@@ -206,7 +212,7 @@ class PHPAutoStyle {
 							// continue;
 						}
 						$this->result.="\n";
-						$this->result.=str_repeat("\t", $this->_ident);
+						$this->result.=str_repeat($this->_indentation, $this->_ident);
 					}
 
 					else if($this->starts($this->_chars, "//")) {
@@ -231,7 +237,7 @@ class PHPAutoStyle {
 						$this->_index++;
 						$this->result.=" {\n";
 						// $this->result.="...";
-						$this->result.=str_repeat("\t", $this->_ident);
+						$this->result.=str_repeat($this->_indentation, $this->_ident);
 					}
 
 					else if($this->starts($this->_chars, "}")) {
@@ -243,7 +249,7 @@ class PHPAutoStyle {
 						}
 						$this->removeLastLine();
 						$this->result.="\n";
-						$this->result.=str_repeat("\t", $this->_ident);
+						$this->result.=str_repeat($this->_indentation, $this->_ident);
 						$this->result.="}\n";
 					}
 
@@ -345,7 +351,7 @@ class PHPAutoStyle {
 					$this->result.=" {\n";
 					$this->_ident++;
 					$this->_idents[]="{";
-					$this->result.=str_repeat("\t", $this->_ident);
+					$this->result.=str_repeat($this->_indentation, $this->_ident);
 					$this->_open_for=false;
 				}
 			}
