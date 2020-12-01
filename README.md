@@ -8,6 +8,8 @@ I developed this tool for myself, not for money, not for a special company.
 
 Although it used in some software of a company in India.
 
+Also it used as PHP snippet formate on <a href='https://phpize.online'>PHPize.online</a>
+
 We waste our time to format the code.
 So it will be a fantastic tool.
 
@@ -27,29 +29,43 @@ Left: Output, Right: Input
 
 ![ScreenShot](https://raw.githubusercontent.com/BaseMax/PHPAS/master/screenshot.png)
 
-### Using
+### Usage
 
 ```php
 <?php
+/* Include Class */
 include "PHPAS.php"
-$AS=new AutoStyle();
-///////////////////////////////////////
+
+/* Create Class Instance with default options */
+$autoStyle = new AutoStyle();
+
+/* or with optional configuratoin */
+$options = [
+	'identation' => '    ' // 4 spaces (default Tab)
+];
+
+$autoStyle = new AutoStyle($options);
+
+/* Format code from file */
 print $AS->loadFile("test.php") ."\n";
+
+/* Format code from string */
 print $AS->loadString("<?php\nprint 'hi';\n") ."\n";
 ```
 
-### Functions
+### Class Methods
 
-| Function Name  | Goal |
-| ------------- | ------------- |
-| loadFile  	| Auto Style, format a file and display output... |
-| loadString  	| Auto Style, format a string code and display output... |
+| Method        			| Goal |
+| ------------------------- | ------------- |
+| setOptions($options) 		| Change formatter options... 	|
+| loadFile($fileName)  		| Auto Style, format a file and display output... |
+| loadString($codeString)	| Auto Style, format a string code and display output... |
 
 ### Input
 
 ```php
 <?php
-/* dfgdgdf gdfg */
+/* inline comment */
 for ($v = 7;$v <= 100 / 10;$v++) {
 $b = $v;
 $x = [];
@@ -67,7 +83,7 @@ solve($x, $v, $b, $k, $r);
 
 ```php
 <?php
-/* dfgdgdf gdfg */
+/* inline comment */
 for($v=7;$v<=100/10;$v++) {
 	$b=$v;
 	$x=[];
@@ -89,7 +105,7 @@ for($v=7;$v<=100/10;$v++) {
 
 ```php
 <?php
-/*      	 	 	 dfgdgdf gdfg */
+/*      	 	 	 inline comment */
 for ($v = 7;$v <= 100 / 10;$v++) { $b = $v; $x = []; for ($i = 1;$i <= $v;$i++) {$x[] = $i;
 }
 for ($k = 3;$k <= ((floor($v - 1) / 2) + 1);$k++) { $r = $k;
@@ -101,7 +117,7 @@ $str="hello world!";
 
 ```php
 <?php
-/* dfgdgdf gdfg */
+/* inline comment */
 for($v = 7;$v <= 100 / 10;$v++) {
 	$b=$v;
 	$x=[];
