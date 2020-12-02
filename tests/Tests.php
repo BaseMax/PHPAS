@@ -1,5 +1,7 @@
 <?php
-include "PHPAS.php";
+// https://github.com/BaseMax/PHPAS
+include "../PHPAS.php";
+
 if($files = opendir('./php/')) {
 	$index=1;
 	while(false !== ($file = readdir($files))) {
@@ -18,6 +20,9 @@ if($files = opendir('./php/')) {
 					print "FALSE";
 				}
 				print "\n";
+			}
+			else {
+				print "-> $output_filename not exists!\n";
 			}
 			$index++;
 		}
