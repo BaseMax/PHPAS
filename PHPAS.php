@@ -2,9 +2,9 @@
 /**
 *
 * @Name : PHPAS/PHPAS.php (PHP Beautifier)
-* @Version : 1.0
+* @Version : 1.1.0
 * @Programmer : Max
-* @Date : 2019-05-25
+* @Date : 2019-05-25, 2020-11-01, 2020-11-02
 * @Released under : https://github.com/BaseMax/PHPAS/blob/master/LICENSE
 * @Repository : https://github.com/BaseMax/PHPAS
 *
