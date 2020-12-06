@@ -78,10 +78,24 @@ class PHPAutoStyle {
 	}
 
 	public function format() {
+		$this->_input=$this->patternReplace($this->_input);
 		$this->_length=mb_strlen($this->_input);
 		$this->parse();
 		// $this->solve();
 		return $this->result;
+	}
+
+	private function patternReplace($input) {
+		// expandable replacement patterns
+		$patterns = [
+			['/(\$\w+)\W*=\s*(.+;)/', '${1}=${2}']
+		];
+
+		foreach($patterns as $p) {
+			$input = preg_replace($p[0], $p[1], $input);
+		}
+
+		return $input;
 	}
 
 	// getLastCharacter
