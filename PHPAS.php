@@ -2,9 +2,9 @@
 /**
 *
 * @Name : PHPAS/PHPAS.php (PHP Beautifier)
-* @Version : 1.0
+* @Version : 1.0.2
 * @Programmer : Max
-* @Date : 2019-05-25
+* @Date : 2020-12-06
 * @Released under : https://github.com/BaseMax/PHPAS/blob/master/LICENSE
 * @Repository : https://github.com/BaseMax/PHPAS
 *
@@ -68,15 +68,16 @@ class PHPAutoStyle {
 	public function loadFile($filename) {
 		$this->_filename=$filename;
 		$this->_input=file_get_contents($this->_filename);
-		$this->_length=mb_strlen($this->_input);
-		$this->parse();
-		// $this->solve();
-		return $this->result;
+		return $this->format();
 	}
 
 	// loadString
 	public function loadString($input) {
 		$this->_input=$input;
+		return $this->format();
+	}
+
+	public function format() {
 		$this->_length=mb_strlen($this->_input);
 		$this->parse();
 		// $this->solve();
