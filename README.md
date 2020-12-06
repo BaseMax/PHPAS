@@ -2,18 +2,20 @@
 
 A tool for format and beautify the style of PHP code with my style.
 
+## Purpose
+
+We waste our time to format the code.
+So it will be a fantastic tool.
+
+Anyway, I hope this tool can help you for format a PHP code easily and fast.
+
 ## Story
 
 I developed this tool for myself, not for money, not for a special company.
 
 Although it used in some software of a company in India.
 
-Also it used as PHP snippet formate on <a href='https://phpize.online'>PHPize.online</a>
-
-We waste our time to format the code.
-So it will be a fantastic tool.
-
-Anyway, I hope this tool can help you for format a PHP code easily and fast.
+Also it used as PHP snippet formate on [PHPize.online](https://phpize.online)
 
 
 ## Main purpose
