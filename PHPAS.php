@@ -2,9 +2,9 @@
 /**
 *
 * @Name : PHPAS/PHPAS.php (PHP Beautifier)
-* @Version : 1.1.0
-* @Programmer : Max
-* @Date : 2019-05-25, 2020-11-01, 2020-11-02
+* @Version : 1.1.1
+* @Programmers : Max, Slava Rozhnev
+* @Date : 2019-05-25 - 2020-12-06
 * @Released under : https://github.com/BaseMax/PHPAS/blob/master/LICENSE
 * @Repository : https://github.com/BaseMax/PHPAS
 *
@@ -68,19 +68,34 @@ class PHPAutoStyle {
 	public function loadFile($filename) {
 		$this->_filename=$filename;
 		$this->_input=file_get_contents($this->_filename);
+		return $this->format();
+	}
+
+	// loadString
+	public function loadString($input) {
+		$this->_input=$input;
+		return $this->format();
+	}
+
+	public function format() {
+		$this->_input=$this->patternReplace($this->_input);
 		$this->_length=mb_strlen($this->_input);
 		$this->parse();
 		// $this->solve();
 		return $this->result;
 	}
 
-	// loadString
-	public function loadString($input) {
-		$this->_input=$input;
-		$this->_length=mb_strlen($this->_input);
-		$this->parse();
-		// $this->solve();
-		return $this->result;
+	private function patternReplace($input) {
+		// expandable replacement patterns
+		$patterns = [
+			['/(\$\w+)\W*=\s*(.+;)/', '${1}=${2}']
+		];
+
+		foreach($patterns as $p) {
+			$input = preg_replace($p[0], $p[1], $input);
+		}
+
+		return $input;
 	}
 
 	// getLastCharacter
